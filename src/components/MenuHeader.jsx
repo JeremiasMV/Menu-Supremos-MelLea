@@ -1,17 +1,20 @@
+import data from "../data/businessInfo.json";
 import { Pizza, Phone } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-
-const phones = [
-  { label: "+56 9 87308245", number: "+56987308245" },
-  { label: "+56 9 87308245", number: "+56987308245" }
-];
+import { motion } from 'framer-motion';
 
 export function MenuHeader({ selectedPhone, onPhoneChange }) {
+  const phones = data.phones.map((phone) => ({
+    label: `+56 9 ${phone.slice(-8)}`,
+    number: `+56${phone}`
+  }));
   return (
     <motion.header 
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className="sticky top-0 z-50 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 shadow-2xl border-b border-amber-500/20"
+      className="sticky top-0 z-50 shadow-2xl border-b border-amber-500/30"
+      style={{
+        background: 'linear-gradient(135deg, #352e26 0%, #241f18 50%, #1b1814 100%)'
+      }}
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
@@ -23,7 +26,7 @@ export function MenuHeader({ selectedPhone, onPhoneChange }) {
 
             <div>
               <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-amber-400 to-amber-500 bg-clip-text text-transparent">
-                Comida express
+                {data.name}
               </h1>
               <p className="text-amber-200/70 text-sm">Comida casera auténtica</p>
             </div>
@@ -37,17 +40,17 @@ export function MenuHeader({ selectedPhone, onPhoneChange }) {
 
             <div className="flex gap-2">
               {phones.map((phone) => (
-                <button
+                <a
                   key={phone.number}
-                  onClick={() => onPhoneChange(phone.number)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  href={`tel:${phone.number}`}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all block ${
                     selectedPhone === phone.number
                       ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 shadow-lg shadow-amber-500/30'
-                      : 'bg-slate-800/50 text-amber-400 hover:bg-slate-800 border border-amber-500/30'
+                      : 'bg-slate-800/50 text-amber-400 hover:bg-slate-800 border border-amber-500/30 hover:border-amber-500/60'
                   }`}
                 >
                   {phone.label}
-                </button>
+                </a>
               ))}
             </div>
           </div>

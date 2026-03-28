@@ -1,7 +1,28 @@
 import { X, Trash2, Send } from 'lucide-react';
 import { motion, AnimatePresence } from "framer-motion";
+import { useState } from 'react';
 
 export function CartModal({ isOpen, onClose, items, onRemoveItem, onSendWhatsApp, total }) {
+  const [formData, setFormData] = useState({
+    name: '',
+    paymentMethod: 'No especificado'
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSendWhatsApp = () => {
+    if (!formData.name.trim()) {
+      alert('Por favor, ingresa tu nombre');
+      return;
+    }
+    onSendWhatsApp(formData);
+  };
   return (
     <AnimatePresence>
       {isOpen && (
@@ -84,7 +105,36 @@ export function CartModal({ isOpen, onClose, items, onRemoveItem, onSendWhatsApp
             </div>
 
             {items.length > 0 && (
-              <div className="border-t border-amber-500/30 p-6 bg-slate-950/50">
+              <div className="border-t border-amber-500/30 p-6 bg-slate-950/50 space-y-4 max-h-[30vh] overflow-y-auto">
+                <div className="bg-slate-900/50 rounded-xl p-4 space-y-3">
+                  <div>
+                    <label className="text-amber-400 text-sm font-semibold block mb-2">Nombre *</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="Tu nombre completo"
+                      className="w-full bg-slate-800 text-white rounded-lg px-4 py-2 border border-amber-500/30 focus:border-amber-500 focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-amber-400 text-sm font-semibold block mb-2">Método de Pago (opcional)</label>
+                    <select
+                      name="paymentMethod"
+                      value={formData.paymentMethod}
+                      onChange={handleInputChange}
+                      className="w-full bg-slate-800 text-white rounded-lg px-4 py-2 border border-amber-500/30 focus:border-amber-500 focus:outline-none"
+                    >
+                      <option>No especificado</option>
+                      <option>Efectivo</option>
+                      <option>Transferencia</option>
+                      <option>Tarjeta</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xl font-bold text-amber-400">Total</span>
                   <span className="text-3xl font-bold bg-gradient-to-r from-amber-400 to-amber-500 bg-clip-text text-transparent">
@@ -95,7 +145,7 @@ export function CartModal({ isOpen, onClose, items, onRemoveItem, onSendWhatsApp
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={onSendWhatsApp}
+                  onClick={handleSendWhatsApp}
                   className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-xl hover:shadow-green-500/30 transition-all flex items-center justify-center gap-2"
                 >
                   <Send className="size-6" />

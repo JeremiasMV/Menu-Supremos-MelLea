@@ -163,6 +163,79 @@ const products = [
     image: QuesoPalta,
     category: 'Sandwiches'
   },
+  // Pastelitos (sin imagen por ahora, a futuro se importan y asignan en image)
+  {
+    id: '27',
+    name: 'Muffin Arándano',
+    description: 'Muffin casero de arándano',
+    price: 1000,
+    image: '',
+    category: 'Pastelitos'
+  },
+  {
+    id: '28',
+    name: 'Muffin trozo chocolate',
+    description: 'Muffin con trozos de chocolate',
+    price: 1000,
+    image: '',
+    category: 'Pastelitos'
+  },
+  {
+    id: '29',
+    name: 'Alfajor maicena',
+    description: 'Alfajor tradicional de maicena',
+    price: 1000,
+    image: '',
+    category: 'Pastelitos'
+  },
+  {
+    id: '30',
+    name: 'Alfajor chocolate',
+    description: 'Alfajor de chocolate',
+    price: 1000,
+    image: '',
+    category: 'Pastelitos'
+  },
+  {
+    id: '31',
+    name: 'Delicia',
+    description: 'Delicia casera',
+    price: 1000,
+    image: '',
+    category: 'Pastelitos'
+  },
+  {
+    id: '32',
+    name: 'Alfajor art. chico',
+    description: 'Alfajor artesanal pequeño',
+    price: 500,
+    image: '',
+    category: 'Pastelitos'
+  },
+  {
+    id: '33',
+    name: 'Alfajor art. grande',
+    description: 'Alfajor artesanal grande',
+    price: 1000,
+    image: '',
+    category: 'Pastelitos'
+  },
+  {
+    id: '34',
+    name: 'Pie de Limón',
+    description: 'Pie de limón casero',
+    price: 2000,
+    image: '',
+    category: 'Pastelitos'
+  },
+  {
+    id: '35',
+    name: 'Cheesecake Oreo',
+    description: 'Cheesecake de Oreo',
+    price: 2000,
+    image: '',
+    category: 'Pastelitos'
+  },
 
   // Otros
   {
@@ -313,9 +386,14 @@ export default function App() {
     toast.success('Producto eliminado del carrito');
   };
 
-    const sendToWhatsApp = () => {
+    const sendToWhatsApp = (formData) => {
     let message = '¡Hola! 🍕 Me gustaría hacer el siguiente pedido:\n\n';
     
+    message += `*DATOS DEL CLIENTE:*\n`;
+    message += `• Nombre: ${formData.name}\n`;
+    message += `• Método de Pago: ${formData.paymentMethod}\n\n`;
+    
+    message += `*PRODUCTOS:*\n`;
     cartItems.forEach(({ product, quantity }) => {
       message += `• ${product.name} x${quantity} - $${(product.price * quantity).toLocaleString('es-CL')}\n`;
     });
@@ -330,7 +408,7 @@ export default function App() {
   }; 
 
     return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-950 via-slate-900 to-zinc-950">
+<div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, #2d2922 0%, #1e1a16 100%)' }}>
       <Toaster position="top-center" richColors />
       
       <MenuHeader 

@@ -13,9 +13,11 @@ export function ProductCard({ product, quantity, onAdd, onRemove }) {
     >
       <div className="relative h-48 overflow-hidden bg-gradient-to-br from-slate-950 to-slate-900">
         <img
-  src={product.image}
+  src={product.image || 'https://via.placeholder.com/640x480/2e2a24/ffffff?text=Imagen+pr%C3%B3xima'}
   alt={product.name}
-  className="w-full h-full object-cover"
+  className="w-full h-full object-cover pointer-events-none"
+  draggable="false"
+  onContextMenu={(e) => e.preventDefault()}
 />
 
         {quantity > 0 && (

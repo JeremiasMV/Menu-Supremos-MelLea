@@ -182,3 +182,51 @@
     border-right-color: var(--border);
   }
 }
+
+/* Estilos para el fondo y cuerpo de la aplicación */
+body {
+  background-color: #1a1a1a;
+}
+
+/* Prevenir arrastre y copia de imágenes */
+img {
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  pointer-events: auto;
+}
+
+img[src*="products"],
+img[src*="product"],
+img[src*="pizza"],
+img[src*="menu"] {
+  user-select: none;
+  -webkit-user-drag: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Estilos para el header */
+header {
+  background: linear-gradient(135deg, #2d2319 0%, #1a1515 50%, #0f0f0f 100%) !important;
+  box-shadow: 0 4px 20px rgba(217, 119, 6, 0.15);
+}
+
+/* Estilos para el footer */
+footer {
+  background-color: #121212 !important;
+  border-top-color: #2d2319 !important;
+}
+
+footer a {
+  transition: all 0.3s ease;
+}
+
+footer a:hover {
+  color: #f59e0b !important;
+  transform: scale(1.1);
+}
