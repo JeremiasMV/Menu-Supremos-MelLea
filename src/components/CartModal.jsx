@@ -31,7 +31,6 @@ export function CartModal({ isOpen, onClose, items, onRemoveItem, onSendWhatsApp
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
             className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50"
           />
 
@@ -57,7 +56,7 @@ export function CartModal({ isOpen, onClose, items, onRemoveItem, onSendWhatsApp
               </button>
             </div>
 
-            <div className="p-6 overflow-y-auto max-h-[60vh]">
+            <div className="p-6 overflow-y-auto max-h-[calc(90vh-6rem)] space-y-6">
               {items.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-slate-300 text-lg">Tu carrito está vacío</p>
@@ -102,10 +101,9 @@ export function CartModal({ isOpen, onClose, items, onRemoveItem, onSendWhatsApp
                   ))}
                 </div>
               )}
-            </div>
 
-            {items.length > 0 && (
-              <div className="border-t border-amber-500/30 p-6 bg-slate-950/50 space-y-4 max-h-[30vh] overflow-y-auto">
+              {items.length > 0 && (
+                <div className="border-t border-amber-500/30 pt-6 space-y-4">
                 <div className="bg-slate-900/50 rounded-xl p-4 space-y-3">
                   <div>
                     <label className="text-amber-400 text-sm font-semibold block mb-2">Nombre *</label>
@@ -153,6 +151,7 @@ export function CartModal({ isOpen, onClose, items, onRemoveItem, onSendWhatsApp
                 </motion.button>
               </div>
             )}
+          </div>
           </motion.div>
         </>
       )}

@@ -6,12 +6,14 @@ import { CartModal } from './components/CartModal';
 import { CategoryFilter } from './components/CategoryFilter';
 import MenuFooter from './components/MenuFooter';
 import { toast, Toaster } from 'sonner';
-import SerranoRucula from './assets/Jamón-Serrano-Rúcula.jpg';
+import SerranoRucula from './assets/PizzaSerranoRucula.jpeg';
+import Hawaiana from './assets/PizzaHawaiana.jpeg';
+import Vegetariana from './assets/PizzaVegetariana.jpeg';
 import Marina from './assets/Marina.jpg';
-import Mechada from './assets/pizza-mechada.jpg';
-import PolloBBQ from './assets/pollo-bbq.jpg';
-import Peperoni from './assets/peperoni.jpg';
-import Napolitana from './assets/napolitana.jpg';
+import Mechada from './assets/PizzaMechada.jpeg';
+import PolloBBQ from './assets/PizzaPolloBBQ.jpeg';
+import Peperoni from './assets/PizzaPeperoni.jpeg';
+import Napolitana from './assets/PizzaNapolitana.jpeg';
 import JamonQueso from './assets/jamon-queso.jpg';
 import SalameQueso from './assets/sanwich-salame-queso.jpg';
 import Huevo from './assets/sandwich-huevo.jpg';
@@ -20,7 +22,7 @@ import HuevoQueso from './assets/sandwich-huevo-queso.png';
 import HuevoJamon from './assets/Pan-Huevo-Jamon.jpg';
 import JamonPalta from './assets/sandwich-palta-jamon.png';
 import QuesoPalta from './assets/sandwich-queso-palta.png';
-import PalitosAjo from './assets/Pan-al-ajo.jpg';
+import PalitosAjo from './assets/PalitosAjo.jpeg';
 import PromoPizza from './assets/pizza-bebida-promo.jpg';
 import BebidaLata from './assets/Bebida-lata-350cc.jpg';
 import Bebida586 from './assets/bebida-586.jpg';
@@ -30,13 +32,22 @@ import Bebida125 from './assets/bebida-125l.jpg';
 import Bebida150 from './assets/bebida-125l.jpg';
 import te from './assets/te-vaso.jpg';
 import cafe from './assets/cafe-vaso.jpg';
+import MuffinArandano from './assets/MuffinArandano.png';
+import MuffinTrozoChocolate from './assets/MufinTrozoChocolate.jpeg';
+import AlfajorMaicena from './assets/AlfajorMaicena.jpeg';
+import AlfajorChocolate from './assets/AlfajorChocolate.jpeg';
+import Delicia from './assets/Delicia.jpeg';
+import AlfajorChico from './assets/AlfajorArtesanalChico.jpeg';
+import AlfajorGrande from './assets/AlfajorArtesanalGrande.jpeg';
+import PieLimon from './assets/PieLimon.jpeg';
+import CheesecakeOreo from './assets/CheesecakeOreo.jpeg';
 //Modificaciones asociadas a Vercel para publicar el proyecto sin problemas.
 const products = [
   // Pizzas
   {
     id: '1',
     name: 'Jamón Serrano Rúcula',
-    description: 'Exquisita combinación de jamón serrano con rúcula fresca',
+    description: 'Masa fina tipo romana 30 cm, salsa tomate casera, queso mozzarella, tomate serrano y rúcula',
     price: 9000,
     image: SerranoRucula,
     category: 'Pizzas'
@@ -44,7 +55,7 @@ const products = [
   {
     id: '2',
     name: 'Marina',
-    description: 'Deliciosos frutos del mar sobre salsa de tomate',
+    description: 'Masa fina tipo romana 30 cm, salsa pomodoro casera, queso mozzarella, tomates asados, camarones, aros de calamar, choritos y albahaca',
     price: 10000,
     image: Marina,
     category: 'Pizzas'
@@ -52,7 +63,7 @@ const products = [
   {
     id: '3',
     name: 'Mechada',
-    description: 'Sabrosa carne mechada con queso y cebolla',
+    description: 'Masa fina tipo romana 30 cm, salsa tomate casera, mechada, tomates asados, queso mozzarella, cebolla caramelizada y albahaca',
     price: 10000,
     image: Mechada,
     category: 'Pizzas'
@@ -60,7 +71,7 @@ const products = [
   {
     id: '4',
     name: 'Pollo BBQ',
-    description: 'Jugoso pollo con salsa BBQ y cebolla caramelizada',
+    description: 'Masa fina tipo romana 30 cm, salsa Pomodoro casera, queso mozzarella, pollo barbecue, pimientos, cebolla acarameladas, hojas de albahaca',
     price: 10000,
     image: PolloBBQ,
     category: 'Pizzas'
@@ -68,7 +79,7 @@ const products = [
   {
     id: '5',
     name: 'Pepperoni',
-    description: 'Clásica pizza con pepperoni y queso mozzarella',
+    description: 'Masa fina tipo romana 30 cm, salsa tomate casera, queso mozzarella, peperoni y orégano',
     price: 8000,
     image: Peperoni,
     category: 'Pizzas'
@@ -76,7 +87,7 @@ const products = [
   {
     id: '6',
     name: 'Napolitana',
-    description: 'Salsa de tomate, mozzarella, tomate fresco y albahaca',
+    description: 'Masa fina tipo romana 30 cm, salsa de tomate casera, queso mozzarella, tomate, jamón pierna, queso, aceituna y orégano',
     price: 8000,
     image: Napolitana,
     category: 'Pizzas'
@@ -84,17 +95,17 @@ const products = [
   {
     id: '7',
     name: 'Vegetariana',
-    description: 'Variedad de vegetales frescos con queso',
+    description: 'Masa fina tipo romana 30 cm, salsa tomate casera, queso mozzarella, champiñones, pimiento, palmito, tomate, rúcula y orégano',
     price: 8000,
-    image: 'https://images.unsplash.com/photo-1611007304706-279fe3d29bda?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx2ZWdldGFyaWFuJTIwcGl6emElMjB2ZWdldGFibGVzfGVufDF8fHx8MTc3NDI2MDA0NHww&ixlib=rb-4.1.0&q=80&w=1080',
+    image: Vegetariana,
     category: 'Pizzas'
   },
   {
     id: '8',
     name: 'Hawaiana',
-    description: 'Jamón, piña y mozzarella',
+    description: 'Masa fina tipo romana 30 cm, salsa tomate casera, queso mozzarella, jamón, tomate y piña',
     price: 8000,
-    image: 'https://images.unsplash.com/photo-1671572579989-fa11cbd86eef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoYXdhaWlhbiUyMHBpenphJTIwcGluZWFwcGxlJTIwaGFtfGVufDF8fHx8MTc3NDMyODQxM3ww&ixlib=rb-4.1.0&q=80&w=1080',
+    image: Hawaiana,
     category: 'Pizzas'
   },
   
@@ -118,7 +129,7 @@ const products = [
   {
     id: '11',
     name: 'Sandwich Huevo',
-    description: 'Huevo revuelto en pan casero',
+    description: 'Huevo revuelto en pan fresco',
     price: 1500,
     image: Huevo,
     category: 'Sandwiches'
@@ -134,7 +145,7 @@ const products = [
   {
     id: '13',
     name: 'Sandwich Huevo-Queso',
-    description: 'Huevo con queso derretido',
+    description: 'Huevo con queso',
     price: 1500,
     image: HuevoQueso,
     category: 'Sandwiches'
@@ -158,18 +169,18 @@ const products = [
   {
     id: '16',
     name: 'Sandwich Queso-Palta',
-    description: 'Queso con palta cremosa',
+    description: 'Queso con palta fresca',
     price: 1500,
     image: QuesoPalta,
     category: 'Sandwiches'
   },
-  // Pastelitos (sin imagen por ahora, a futuro se importan y asignan en image)
+  
   {
     id: '27',
     name: 'Muffin Arándano',
     description: 'Muffin casero de arándano',
     price: 1000,
-    image: '',
+    image: MuffinArandano,
     category: 'Pastelitos'
   },
   {
@@ -177,7 +188,7 @@ const products = [
     name: 'Muffin trozo chocolate',
     description: 'Muffin con trozos de chocolate',
     price: 1000,
-    image: '',
+    image: MuffinTrozoChocolate,
     category: 'Pastelitos'
   },
   {
@@ -185,7 +196,7 @@ const products = [
     name: 'Alfajor maicena',
     description: 'Alfajor tradicional de maicena',
     price: 1000,
-    image: '',
+    image: AlfajorMaicena,
     category: 'Pastelitos'
   },
   {
@@ -193,7 +204,7 @@ const products = [
     name: 'Alfajor chocolate',
     description: 'Alfajor de chocolate',
     price: 1000,
-    image: '',
+    image: AlfajorChocolate,
     category: 'Pastelitos'
   },
   {
@@ -201,7 +212,7 @@ const products = [
     name: 'Delicia',
     description: 'Delicia casera',
     price: 1000,
-    image: '',
+    image: Delicia,
     category: 'Pastelitos'
   },
   {
@@ -209,7 +220,7 @@ const products = [
     name: 'Alfajor art. chico',
     description: 'Alfajor artesanal pequeño',
     price: 500,
-    image: '',
+    image: AlfajorChico,
     category: 'Pastelitos'
   },
   {
@@ -217,7 +228,7 @@ const products = [
     name: 'Alfajor art. grande',
     description: 'Alfajor artesanal grande',
     price: 1000,
-    image: '',
+    image: AlfajorGrande,
     category: 'Pastelitos'
   },
   {
@@ -225,7 +236,7 @@ const products = [
     name: 'Pie de Limón',
     description: 'Pie de limón casero',
     price: 2000,
-    image: '',
+    image: PieLimon,
     category: 'Pastelitos'
   },
   {
@@ -233,7 +244,7 @@ const products = [
     name: 'Cheesecake Oreo',
     description: 'Cheesecake de Oreo',
     price: 2000,
-    image: '',
+    image: CheesecakeOreo,
     category: 'Pastelitos'
   },
 
