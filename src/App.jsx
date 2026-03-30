@@ -1,15 +1,17 @@
 import { useState, useMemo } from 'react';
 import { MenuHeader } from './components/MenuHeader';
 import { ProductCard } from './components/ProductCard';
+import { PotatoCard } from './components/PotatoCard';
 import { CartButton } from './components/CartButton';
 import { CartModal } from './components/CartModal';
+import { PotatoModal } from './components/PotatoModal';
 import { CategoryFilter } from './components/CategoryFilter';
 import MenuFooter from './components/MenuFooter';
-import { toast, Toaster } from 'sonner';
+import { useCustomToast, ToastContainer } from './components/CustomToast';
 import SerranoRucula from './assets/PizzaSerranoRucula.jpeg';
 import Hawaiana from './assets/PizzaHawaiana.jpeg';
 import Vegetariana from './assets/PizzaVegetariana.jpeg';
-import Marina from './assets/Marina.jpg';
+import Marina from './assets/PizzaMarina.jpeg';
 import Mechada from './assets/PizzaMechada.jpeg';
 import PolloBBQ from './assets/PizzaPolloBBQ.jpeg';
 import Peperoni from './assets/PizzaPeperoni.jpeg';
@@ -24,12 +26,16 @@ import JamonPalta from './assets/sandwich-palta-jamon.png';
 import QuesoPalta from './assets/sandwich-queso-palta.png';
 import PalitosAjo from './assets/PalitosAjo.jpeg';
 import PromoPizza from './assets/pizza-bebida-promo.jpg';
+import PapasSupremas from './assets/PapasSupremas.jpeg';
+import PapasFritas from './assets/PapasFritas.webp';
+import PapasFritasChicas from './assets/PapasFritasChicas.jpg';
+import PapasFritasGrandes from './assets/PapasFritasGrandes.webp';
 import BebidaLata from './assets/Bebida-lata-350cc.jpg';
 import Bebida586 from './assets/bebida-586.jpg';
 import ScoreLata from './assets/score-lata.jpg';
 import AguaMineral from './assets/agua-mineral.jpg';
 import Bebida125 from './assets/bebida-125l.jpg';
-import Bebida150 from './assets/bebida-125l.jpg';
+import Bebida150 from './assets/Bebida150L.webp';
 import te from './assets/te-vaso.jpg';
 import cafe from './assets/cafe-vaso.jpg';
 import MuffinArandano from './assets/MuffinArandano.png';
@@ -41,7 +47,20 @@ import AlfajorChico from './assets/AlfajorArtesanalChico.jpeg';
 import AlfajorGrande from './assets/AlfajorArtesanalGrande.jpeg';
 import PieLimon from './assets/PieLimon.jpeg';
 import CheesecakeOreo from './assets/CheesecakeOreo.jpeg';
+
 //Modificaciones asociadas a Vercel para publicar el proyecto sin problemas.
+
+// Toppings para papas
+const potatoToppings = [
+  { id: 'topping-1', name: 'Carne mechada', price: 1500 },
+  { id: 'topping-2', name: 'Cebolla caramelizada', price: 1000 },
+  { id: 'topping-3', name: 'Choclo a la crema', price: 1000 },
+  { id: 'topping-4', name: 'Champiñon a la crema', price: 1000 },
+  { id: 'topping-5', name: 'Salsa de queso', price: 500 },
+  { id: 'topping-6', name: 'Choricillo', price: 500 },
+  { id: 'topping-7', name: 'Vienesa', price: 500 }
+];
+
 const products = [
   // Pizzas
   {
@@ -55,7 +74,7 @@ const products = [
   {
     id: '2',
     name: 'Marina',
-    description: 'Masa fina tipo romana 30 cm, salsa pomodoro casera, queso mozzarella, tomates asados, camarones, aros de calamar, choritos y albahaca',
+    description: 'Masa fina tipo romana 30 cm, salsa pomodoro casera, queso mozzarella, tomates asados, camarones, aros de calamar, choritos con toque de oliva y albahaca',
     price: 10000,
     image: Marina,
     category: 'Pizzas'
@@ -109,72 +128,39 @@ const products = [
     category: 'Pizzas'
   },
   
-  // Sandwiches - Todos a $1.500
+  // Papas Fritas
   {
-    id: '9',
-    name: 'Sandwich Jamón-Queso',
-    description: 'Jamón y queso en pan fresco',
+    id: '36',
+    name: 'Papas Fritas Chicas',
+    description: 'Porción de papas fritas chicas crujientes y doradas',
     price: 1500,
-    image: JamonQueso,
-    category: 'Sandwiches'
+    image:  PapasFritasChicas,
+    category: 'Papas Fritas'
   },
   {
-    id: '10',
-    name: 'Sandwich Salame-Queso',
-    description: 'Salame italiano con queso',
-    price: 1500,
-    image: SalameQueso,
-    category: 'Sandwiches'
+    id: '37',
+    name: 'Papas Fritas Medianas',
+    description: 'Porción de papas fritas medianas crujientes y doradas',
+    price: 2500,
+    image: PapasFritas,
+    category: 'Papas Fritas'
   },
   {
-    id: '11',
-    name: 'Sandwich Huevo',
-    description: 'Huevo revuelto en pan fresco',
-    price: 1500,
-    image: Huevo,
-    category: 'Sandwiches'
+    id: '38',
+    name: 'Papas Fritas Grandes',
+    description: 'Porción de papas fritas grandes crujientes y doradas',
+    price: 3500,
+    image: PapasFritasGrandes,
+    category: 'Papas Fritas'
   },
   {
-    id: '12',
-    name: 'Sandwich Huevo-Salame',
-    description: 'Huevo con salame',
-    price: 1500,
-    image: HuevoSalame,
-    category: 'Sandwiches'
+    id: '39',
+    name: 'Papas Supremas Individual',
+    description: 'Papas fritas, carne molida, cebollín, salsa de queso, tomate y salsa sour',
+    price: 5500,
+    image: PapasSupremas,
+    category: 'Papas Fritas'
   },
-  {
-    id: '13',
-    name: 'Sandwich Huevo-Queso',
-    description: 'Huevo con queso',
-    price: 1500,
-    image: HuevoQueso,
-    category: 'Sandwiches'
-  },
-  {
-    id: '14',
-    name: 'Sandwich Huevo-Jamón',
-    description: 'Huevo con jamón',
-    price: 1500,
-    image: HuevoJamon,
-    category: 'Sandwiches'
-  },
-  {
-    id: '15',
-    name: 'Sandwich Jamón-Palta',
-    description: 'Jamón con palta fresca',
-    price: 1500,
-    image: JamonPalta,
-    category: 'Sandwiches'
-  },
-  {
-    id: '16',
-    name: 'Sandwich Queso-Palta',
-    description: 'Queso con palta fresca',
-    price: 1500,
-    image: QuesoPalta,
-    category: 'Sandwiches'
-  },
-  
   {
     id: '27',
     name: 'Muffin Arándano',
@@ -334,9 +320,14 @@ const products = [
 ];
 export default function App() {
   const [cart, setCart] = useState({});
+  const [potatoCart, setPotatoCart] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [selectedPhone, setSelectedPhone] = useState("+56987308245");
+  const [isPotatoModalOpen, setIsPotatoModalOpen] = useState(false);
+  const [selectedPotatoProduct, setSelectedPotatoProduct] = useState(null);
+  const [selectedPhone, setSelectedPhone] = useState("+56955260387");
   const [selectedCategory, setSelectedCategory] = useState("Todos");
+  
+  const toast = useCustomToast();
 
   const categories = useMemo(() => {
     const cats = Array.from(new Set(products.map(p => p.category)));
@@ -349,22 +340,45 @@ export default function App() {
   }, [selectedCategory]);
 
     const cartItems = useMemo(() => {
-    return Object.entries(cart)
+    // Items de productos normales
+    const regularItems = Object.entries(cart)
       .filter(([_, quantity]) => quantity > 0)
       .map(([productId, quantity]) => ({
         product: products.find(p => p.id === productId),
-        quantity
+        quantity,
+        type: 'regular'
       }))
-      .filter(item => item.product); 
-  }, [cart]);
+      .filter(item => item.product);
+    
+    // Items de papas con toppings
+    const potatoItems = potatoCart.map(potatoItem => ({
+      ...potatoItem,
+      type: 'potato'
+    }));
+    
+    return [...regularItems, ...potatoItems];
+  }, [cart, potatoCart]);
 
-    const totalItems = useMemo(() => {
-    return Object.values(cart).reduce((sum, qty) => sum + qty, 0);
-  }, [cart]);
+  const totalItems = useMemo(() => {
+    const regularTotal = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+    const potatoTotal = potatoCart.reduce((sum, item) => sum + item.quantity, 0);
+    return regularTotal + potatoTotal;
+  }, [cart, potatoCart]);
 
   const totalPrice = useMemo(() => {
-    return cartItems.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-  }, [cartItems]);
+    // Precio de productos normales
+    const regularPrice = Object.entries(cart)
+      .filter(([_, quantity]) => quantity > 0)
+      .reduce((sum, [productId, quantity]) => {
+        const product = products.find(p => p.id === productId);
+        return sum + (product?.price || 0) * quantity;
+      }, 0);
+    
+    // Precio de papas con toppings
+    const potatoPrice = potatoCart.reduce((sum, item) => sum + item.totalPrice, 0);
+    
+    return regularPrice + potatoPrice;
+  }, [cart, potatoCart]);
 
     const addToCart = (productId) => {
     setCart(prev => ({
@@ -397,6 +411,26 @@ export default function App() {
     toast.success('Producto eliminado del carrito');
   };
 
+  const handleOpenPotatoModal = (product) => {
+    setSelectedPotatoProduct(product);
+    setIsPotatoModalOpen(true);
+  };
+
+  const handleAddPotatoToCart = (potatoData) => {
+    setPotatoCart(prev => [...prev, {
+      ...potatoData,
+      id: `potato-${Date.now()}-${Math.random()}`
+    }]);
+    
+    const toppingNames = potatoData.toppings.length > 0 
+      ? ` + ${potatoData.toppings.map(t => t.name).join(', ')}`
+      : '';
+    
+    toast.success(`${potatoData.product.name}${toppingNames} agregado al carrito`, {
+      duration: 2000,
+    });
+  };
+
     const sendToWhatsApp = (formData) => {
     let message = '¡Hola! 🍕 Me gustaría hacer el siguiente pedido:\n\n';
     
@@ -405,8 +439,15 @@ export default function App() {
     message += `• Método de Pago: ${formData.paymentMethod}\n\n`;
     
     message += `*PRODUCTOS:*\n`;
-    cartItems.forEach(({ product, quantity }) => {
-      message += `• ${product.name} x${quantity} - $${(product.price * quantity).toLocaleString('es-CL')}\n`;
+    cartItems.forEach(({ product, quantity, type, toppings }) => {
+      if (type === 'regular') {
+        message += `• ${product.name} x${quantity} - $${(product.price * quantity).toLocaleString('es-CL')}\n`;
+      } else if (type === 'potato') {
+        const toppingText = toppings.length > 0 
+          ? `\n  Toppings: ${toppings.map(t => `${t.name} ($${t.price.toLocaleString('es-CL')})`).join(', ')}`
+          : '';
+        message += `• ${product.name} x${quantity}${toppingText} - $${(quantity * (product.price + toppings.reduce((sum, t) => sum + t.price, 0))).toLocaleString('es-CL')}\n`;
+      }
     });
 
     message += `\n*Total: $${totalPrice.toLocaleString('es-CL')}*\n\n¡Gracias!`;
@@ -414,13 +455,22 @@ export default function App() {
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${selectedPhone}?text=${encodedMessage}`;
     
-    window.open(whatsappUrl, '_blank');
-    toast.success('Redirigiendo a WhatsApp...');
+    try {
+      window.open(whatsappUrl, '_blank');
+      if (!window) {
+        toast.warning('Por favor revisa la configuración de popups del navegador');
+        return;
+      }
+      toast.success('Redirigiendo a WhatsApp...');
+    } catch (error) {
+      toast.error('Error al abrir WhatsApp. Intenta manualmente.');
+      console.error('WhatsApp Error:', error);
+    }
   }; 
 
     return (
 <div className="min-h-screen flex flex-col" style={{ background: 'linear-gradient(180deg, #2d2922 0%, #1e1a16 100%)' }}>
-      <Toaster position="top-center" richColors />
+      <ToastContainer />
       
       <MenuHeader 
         selectedPhone={selectedPhone}
@@ -437,15 +487,27 @@ export default function App() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-24">
-          {filteredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              quantity={cart[product.id] || 0}
-              onAdd={() => addToCart(product.id)}
-              onRemove={() => removeFromCart(product.id)}
-            />
-          ))}
+          {filteredProducts.map((product) => {
+            if (product.category === 'Papas Fritas') {
+              return (
+                <PotatoCard
+                  key={product.id}
+                  product={product}
+                  onCartClick={handleOpenPotatoModal}
+                />
+              );
+            }
+            
+            return (
+              <ProductCard
+                key={product.id}
+                product={product}
+                quantity={cart[product.id] || 0}
+                onAdd={() => addToCart(product.id)}
+                onRemove={() => removeFromCart(product.id)}
+              />
+            );
+          })}
         </div>
       </div>
 
@@ -455,13 +517,30 @@ export default function App() {
         onClick={() => setIsCartOpen(true)}
       />
 
+      <PotatoModal
+        isOpen={isPotatoModalOpen}
+        onClose={() => setIsPotatoModalOpen(false)}
+        product={selectedPotatoProduct}
+        onAdd={handleAddPotatoToCart}
+        toppings={potatoToppings}
+      />
+
       <CartModal
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
         items={cartItems}
-        onRemoveItem={removeItemCompletely}
+        onRemoveItem={(id) => {
+          // Si es una papa, remover del potatoCart
+          if (id.startsWith('potato-')) {
+            setPotatoCart(prev => prev.filter(item => item.id !== id));
+          } else {
+            removeItemCompletely(id);
+          }
+          toast.success('Producto eliminado del carrito');
+        }}
         onSendWhatsApp={sendToWhatsApp}
         total={totalPrice}
+        potatoItems={potatoCart}
       />
       <MenuFooter />
     </div>

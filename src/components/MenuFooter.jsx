@@ -13,7 +13,7 @@ function MenuFooter(){
                  <Mail size={20} />
             </a>
             
-            <a href="tel:+56987308245" className="hover:text-amber-400 transition-all hover:scale-110">
+            <a href="tel:+56955360387" className="hover:text-amber-400 transition-all hover:scale-110">
                  <Phone size={20} />
             </a>
 

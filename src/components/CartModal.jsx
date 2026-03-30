@@ -1,12 +1,15 @@
 import { X, Trash2, Send } from 'lucide-react';
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from 'react';
+import { useCustomToast } from './CustomToast';
 
-export function CartModal({ isOpen, onClose, items, onRemoveItem, onSendWhatsApp, total }) {
+export function CartModal({ isOpen, onClose, items, onRemoveItem, onSendWhatsApp, total, potatoItems = [] }) {
   const [formData, setFormData] = useState({
     name: '',
     paymentMethod: 'No especificado'
   });
+
+  const toast = useCustomToast();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -18,10 +21,24 @@ export function CartModal({ isOpen, onClose, items, onRemoveItem, onSendWhatsApp
 
   const handleSendWhatsApp = () => {
     if (!formData.name.trim()) {
-      alert('Por favor, ingresa tu nombre');
+      toast.warning('Por favor, ingresa tu nombre');
       return;
     }
     onSendWhatsApp(formData);
+    // Reset form después de enviar
+    setFormData({
+      name: '',
+      paymentMethod: 'No especificado'
+    });
+  };
+
+  const handleClose = () => {
+    // Reset form cuando se cierra el modal
+    setFormData({
+      name: '',
+      paymentMethod: 'No especificado'
+    });
+    onClose();
   };
   return (
     <AnimatePresence>
@@ -49,7 +66,7 @@ export function CartModal({ isOpen, onClose, items, onRemoveItem, onSendWhatsApp
               </div>
 
               <button
-                onClick={onClose}
+                onClick={handleClose}
                 className="bg-slate-950/20 hover:bg-slate-950/30 rounded-full p-2 transition-colors"
               >
                 <X className="size-6" />
@@ -63,42 +80,92 @@ export function CartModal({ isOpen, onClose, items, onRemoveItem, onSendWhatsApp
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {items.map(({ product, quantity }) => (
-                    <motion.div
-                      key={product.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 20 }}
-                      className="flex items-center gap-4 bg-slate-950/50 rounded-xl p-4 hover:bg-slate-950/70 transition-colors border border-amber-500/20"
-                    >
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="size-20 object-cover rounded-lg"
-                      />
-
-                      <div className="flex-1">
-                        <h3 className="font-bold text-amber-400">{product.name}</h3>
-                        <p className="text-sm text-slate-300">
-                          ${product.price.toLocaleString('es-CL')} × {quantity}
-                        </p>
-                      </div>
-
-                      <div className="text-right">
-                        <p className="font-bold text-lg text-amber-400">
-                          ${(product.price * quantity).toLocaleString('es-CL')}
-                        </p>
-
-                        <button
-                          onClick={() => onRemoveItem(product.id)}
-                          className="text-red-400 hover:text-red-300 text-sm flex items-center gap-1 mt-1"
+                  {items.map((item) => {
+                    if (item.type === 'regular') {
+                      const { product, quantity } = item;
+                      return (
+                        <motion.div
+                          key={product.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 20 }}
+                          className="flex items-center gap-4 bg-slate-950/50 rounded-xl p-4 hover:bg-slate-950/70 transition-colors border border-amber-500/20"
                         >
-                          <Trash2 className="size-4" />
-                          Eliminar
-                        </button>
-                      </div>
-                    </motion.div>
-                  ))}
+                          <img
+                            src={product.image || 'https://via.placeholder.com/80/2e2a24/ffffff?text=Producto'}
+                            alt={product.name}
+                            onError={(e) => e.target.src = 'https://via.placeholder.com/80/2e2a24/ffffff?text=Error'}
+                            className="size-20 object-cover rounded-lg"
+                          />
+
+                          <div className="flex-1">
+                            <h3 className="font-bold text-amber-400">{product.name}</h3>
+                            <p className="text-sm text-slate-300">
+                              ${product.price.toLocaleString('es-CL')} × {quantity}
+                            </p>
+                          </div>
+
+                          <div className="text-right">
+                            <p className="font-bold text-lg text-amber-400">
+                              ${(product.price * quantity).toLocaleString('es-CL')}
+                            </p>
+
+                            <button
+                              onClick={() => onRemoveItem(product.id)}
+                              className="text-red-400 hover:text-red-300 text-sm flex items-center gap-1 mt-1"
+                            >
+                              <Trash2 className="size-4" />
+                              Eliminar
+                            </button>
+                          </div>
+                        </motion.div>
+                      );
+                    } else if (item.type === 'potato') {
+                      const { product, quantity, toppings, id, totalPrice } = item;
+                      const pricePerUnit = (product.price + toppings.reduce((sum, t) => sum + t.price, 0));
+                      return (
+                        <motion.div
+                          key={id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 20 }}
+                          className="flex items-center gap-4 bg-slate-950/50 rounded-xl p-4 hover:bg-slate-950/70 transition-colors border border-amber-500/20"
+                        >
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="size-20 object-cover rounded-lg"
+                          />
+
+                          <div className="flex-1">
+                            <h3 className="font-bold text-amber-400">{product.name}</h3>
+                            {toppings.length > 0 && (
+                              <p className="text-xs text-amber-300 mt-1">
+                                Toppings: {toppings.map(t => t.name).join(', ')}
+                              </p>
+                            )}
+                            <p className="text-sm text-slate-300">
+                              ${pricePerUnit.toLocaleString('es-CL')} × {quantity}
+                            </p>
+                          </div>
+
+                          <div className="text-right">
+                            <p className="font-bold text-lg text-amber-400">
+                              ${totalPrice.toLocaleString('es-CL')}
+                            </p>
+
+                            <button
+                              onClick={() => onRemoveItem(id)}
+                              className="text-red-400 hover:text-red-300 text-sm flex items-center gap-1 mt-1"
+                            >
+                              <Trash2 className="size-4" />
+                              Eliminar
+                            </button>
+                          </div>
+                        </motion.div>
+                      );
+                    }
+                  })}
                 </div>
               )}
 

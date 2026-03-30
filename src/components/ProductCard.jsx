@@ -1,9 +1,10 @@
 import { Plus, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import { useState } from 'react';
 
 
 export function ProductCard({ product, quantity, onAdd, onRemove }) {
+  const [isExpanded, setIsExpanded] = useState(false);
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -39,9 +40,20 @@ export function ProductCard({ product, quantity, onAdd, onRemove }) {
 
           <h3 className="font-bold text-xl text-amber-400 mb-2">{product.name}</h3>
 
-          <p className="text-slate-300 text-sm line-clamp-2">
-            {product.description}
-          </p>
+          <div>
+            <p className={`text-slate-300 text-sm transition-all ${isExpanded ? '' : 'line-clamp-2'}`}>
+              {product.description}
+            </p>
+            
+            {product.description && product.description.length > 80 && (
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="text-amber-400 text-xs font-semibold hover:text-amber-300 mt-2 transition-colors"
+              >
+                {isExpanded ? '▼ Ver menos' : '▲ Ver más'}
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="flex items-center justify-between pt-3 border-t border-amber-500/20">
