@@ -5,7 +5,7 @@ function MenuFooter(){
     return (
         <footer className="text-white text-center py-6 border-t" style={{backgroundColor: '#121212', borderTopColor: '#2d2319'}}>
             <p className="text-sm text-gray-400">
-                Desarrollado por <strong>Jeremías Martínez Villamar | .NET & React</strong>
+                Desarrollado por <strong>Jeremías Martínez • Soluciones digitales</strong>
             </p>
 
            <div className="flex justify-center gap-6 mb-4 mt-4">
@@ -13,7 +13,7 @@ function MenuFooter(){
                  <Mail size={20} />
             </a>
             
-            <a href="tel:+56955360387" className="hover:text-amber-400 transition-all hover:scale-110">
+            <a href="tel:+56987308245" className="hover:text-amber-400 transition-all hover:scale-110">
                  <Phone size={20} />
             </a>
 
