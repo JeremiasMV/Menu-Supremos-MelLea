@@ -25,7 +25,7 @@ import HuevoJamon from './assets/Pan-Huevo-Jamon.jpg';
 import JamonPalta from './assets/sandwich-palta-jamon.png';
 import QuesoPalta from './assets/sandwich-queso-palta.png';
 import PalitosAjo from './assets/PalitosAjo.jpeg';
-import PromoPizza from './assets/pizza-bebida-promo.jpg';
+import PromoPizza from './assets/PromoPizzaBebida.webp';
 import PapasSupremas from './assets/PapasSupremas.jpeg';
 import PapasFritas from './assets/PapasFritas.webp';
 import PapasFritasChicas from './assets/PapasFritasChicas.jpg';
@@ -204,7 +204,7 @@ const products = [
   {
     id: '32',
     name: 'Alfajor art. chico',
-    description: 'Alfajor artesanal pequeño',
+    description: 'Doble capa galleta artesanal, relleno de manjar y cobertura de chocolate',
     price: 500,
     image: AlfajorChico,
     category: 'Pastelitos'
@@ -212,7 +212,7 @@ const products = [
   {
     id: '33',
     name: 'Alfajor art. grande',
-    description: 'Alfajor artesanal grande',
+    description: 'Triple capa galleta artesanal, relleno de manjar y mermelada de frambuesa, y cobertura de chocolate.',
     price: 1000,
     image: AlfajorGrande,
     category: 'Pastelitos'
@@ -246,7 +246,7 @@ const products = [
   {
     id: '18',
     name: 'Promo Pizza + Bebida',
-    description: 'Pizza a elección + bebida',
+    description: 'Pizza de 20 cm + bebida lata 350cc a elección',
     price: 5000,
     image: PromoPizza,
     category: 'Promociones'
@@ -330,8 +330,7 @@ export default function App() {
   const toast = useCustomToast();
 
   const categories = useMemo(() => {
-    const cats = Array.from(new Set(products.map(p => p.category)));
-    return ['Todos', ...cats.sort()];
+    return ['Todos', 'Pizzas', 'Papas Fritas', 'Bebidas', 'Pastelitos', 'Promociones', 'Otros'];
   }, []);
 
     const filteredProducts = useMemo(() => {
