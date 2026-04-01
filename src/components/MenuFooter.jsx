@@ -1,5 +1,5 @@
 import { Mail, Phone } from "lucide-react";
-import { FaInstagram, FaWhatsapp } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaWhatsapp } from "react-icons/fa";
 
 function MenuFooter(){
     return (
@@ -19,9 +19,16 @@ function MenuFooter(){
             <a href="tel:+56955260387" className="hover:text-amber-400 transition-all hover:scale-110">
                  <Phone size={20} />
             </a>
-
             <a 
-              href="https://www.instagram.com/pizza._gourmet?igsh=YmVydTMzdnMyZWR4"
+              href="https://www.facebook.com/profile.php?id=61574508236320&rdid=xE1VFaFhbQa0orFE&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1DbE5xbzpg%2F#"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-amber-400 transition-all hover:scale-110"
+              >
+                <FaFacebook size={20} />
+            </a>
+            <a 
+              href="https://www.instagram.com/pizeriamellea?utm_source=qr&igsh=N2YxNzEycjdlNHU2"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-amber-400 transition-all hover:scale-110"
