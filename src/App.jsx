@@ -246,7 +246,7 @@ const products = [
   {
     id: '18',
     name: 'Promo Pizza + Bebida',
-    description: 'Pizza de 20 cm + bebida lata 350cc a elección',
+    description: 'Pizza de 15cm + bebida lata 350cc a elección',
     price: 5000,
     image: PromoPizza,
     category: 'Promociones'
@@ -373,8 +373,12 @@ export default function App() {
         return sum + (product?.price || 0) * quantity;
       }, 0);
     
-    // Precio de papas con toppings
-    const potatoPrice = potatoCart.reduce((sum, item) => sum + item.totalPrice, 0);
+    // Precio de papas con toppings (recalcula para evitar dependencia de datos obsoletos)
+    const potatoPrice = potatoCart.reduce((sum, item) => {
+      const toppingsTotal = (item.toppings || []).reduce((t, topping) => t + (topping.price || 0), 0);
+      const unitPrice = (item.product?.price || 0) + toppingsTotal;
+      return sum + unitPrice * (item.quantity || 1);
+    }, 0);
     
     return regularPrice + potatoPrice;
   }, [cart, potatoCart]);
@@ -452,7 +456,9 @@ export default function App() {
     message += `\n*Total: $${totalPrice.toLocaleString('es-CL')}*\n\n¡Gracias!`;
 
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${selectedPhone}?text=${encodedMessage}`;
+    const cleanedPhone = selectedPhone.replace(/\D/g, '');
+    const whatsappPhone = cleanedPhone.startsWith('56') ? cleanedPhone : `56${cleanedPhone}`;
+    const whatsappUrl = `https://wa.me/${whatsappPhone}?text=${encodedMessage}`;
     
     try {
       window.open(whatsappUrl, '_blank');
@@ -488,6 +494,18 @@ export default function App() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-24">
           {filteredProducts.map((product) => {
             if (product.category === 'Papas Fritas') {
+              if (product.id === '36') {
+                return (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    quantity={cart[product.id] || 0}
+                    onAdd={() => addToCart(product.id)}
+                    onRemove={() => removeFromCart(product.id)}
+                  />
+                );
+              }
+
               return (
                 <PotatoCard
                   key={product.id}

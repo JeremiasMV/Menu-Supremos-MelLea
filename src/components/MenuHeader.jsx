@@ -3,10 +3,21 @@ import { Pizza, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export function MenuHeader({ selectedPhone, onPhoneChange }) {
-  const phones = data.phones.map((phone) => ({
-    label: `+56 9 ${phone.slice(-8)}`,
-    number: `+56${phone}`
-  }));
+  const normalizePhone = (phone) => {
+    const digits = String(phone).replace(/\D/g, '');
+    const noCountry = digits.startsWith('56') ? digits.slice(2) : digits;
+    const mobile = noCountry.startsWith('9') ? noCountry : `9${noCountry}`;
+    return mobile.slice(-9); // 9 dígitos nacionales (9xxxxxxx)
+  };
+
+  const phones = data.phones.map((phone) => {
+    const mobile = normalizePhone(phone);
+    return {
+      label: `+56 ${mobile.slice(0, 1)} ${mobile.slice(1)}`,
+      number: `+56${mobile}`
+    };
+  });
+
   return (
     <motion.header 
       initial={{ y: -100 }}
