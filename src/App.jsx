@@ -5,6 +5,7 @@ import { PotatoCard } from './components/PotatoCard';
 import { CartButton } from './components/CartButton';
 import { CartModal } from './components/CartModal';
 import { PotatoModal } from './components/PotatoModal';
+import { PromoModal } from './components/PromoModal';
 import { CategoryFilter } from './components/CategoryFilter';
 import MenuFooter from './components/MenuFooter';
 import { useCustomToast, ToastContainer } from './components/CustomToast';
@@ -321,9 +322,12 @@ const products = [
 export default function App() {
   const [cart, setCart] = useState({});
   const [potatoCart, setPotatoCart] = useState([]);
+  const [promoCart, setPromoCart] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isPotatoModalOpen, setIsPotatoModalOpen] = useState(false);
+  const [isPromoModalOpen, setIsPromoModalOpen] = useState(false);
   const [selectedPotatoProduct, setSelectedPotatoProduct] = useState(null);
+  const [selectedPromoProduct, setSelectedPromoProduct] = useState(null);
   const [selectedPhone, setSelectedPhone] = useState("+56955260387");
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   
@@ -333,7 +337,19 @@ export default function App() {
     return ['Todos', 'Pizzas', 'Papas Fritas', 'Bebidas', 'Pastelitos', 'Promociones', 'Otros'];
   }, []);
 
-    const filteredProducts = useMemo(() => {
+  const promoPizzaOptions = useMemo(() => {
+    return products.filter(p => p.id === '5' || p.id === '6');
+  }, []);
+
+  const promoDrinkOptions = useMemo(() => {
+    return [
+      { id: 'cocacola', name: 'Coca-Cola' },
+      { id: 'fanta', name: 'Fanta' },
+      { id: 'sprite', name: 'Sprite' }
+    ];
+  }, []);
+
+  const filteredProducts = useMemo(() => {
     if (selectedCategory === 'Todos') return products;
     return products.filter(p => p.category === selectedCategory);
   }, [selectedCategory]);
@@ -354,15 +370,21 @@ export default function App() {
       ...potatoItem,
       type: 'potato'
     }));
+
+    const promoItems = promoCart.map(promoItem => ({
+      ...promoItem,
+      type: 'promo'
+    }));
     
-    return [...regularItems, ...potatoItems];
-  }, [cart, potatoCart]);
+    return [...regularItems, ...potatoItems, ...promoItems];
+  }, [cart, potatoCart, promoCart]);
 
   const totalItems = useMemo(() => {
     const regularTotal = Object.values(cart).reduce((sum, qty) => sum + qty, 0);
     const potatoTotal = potatoCart.reduce((sum, item) => sum + item.quantity, 0);
-    return regularTotal + potatoTotal;
-  }, [cart, potatoCart]);
+    const promoTotal = promoCart.reduce((sum, item) => sum + item.quantity, 0);
+    return regularTotal + potatoTotal + promoTotal;
+  }, [cart, potatoCart, promoCart]);
 
   const totalPrice = useMemo(() => {
     // Precio de productos normales
@@ -379,9 +401,13 @@ export default function App() {
       const unitPrice = (item.product?.price || 0) + toppingsTotal;
       return sum + unitPrice * (item.quantity || 1);
     }, 0);
+
+    const promoPrice = promoCart.reduce((sum, item) => {
+      return sum + (item.totalPrice || 0);
+    }, 0);
     
-    return regularPrice + potatoPrice;
-  }, [cart, potatoCart]);
+    return regularPrice + potatoPrice + promoPrice;
+  }, [cart, potatoCart, promoCart]);
 
     const addToCart = (productId) => {
     setCart(prev => ({
@@ -432,6 +458,26 @@ export default function App() {
     toast.success(`${potatoData.product.name}${toppingNames} agregado al carrito`, {
       duration: 2000,
     });
+  };
+
+  const handleOpenPromoModal = (product) => {
+    setSelectedPromoProduct(product);
+    setIsPromoModalOpen(true);
+  };
+
+  const handleAddPromoToCart = (promoData) => {
+    setPromoCart(prev => [...prev, {
+      ...promoData,
+      id: `promo-${Date.now()}-${Math.random()}`
+    }]);
+
+    toast.success(`${promoData.product.name} (${promoData.pizza.name}, ${promoData.drink.name}) agregado al carrito`, {
+      duration: 2000,
+    });
+  };
+
+  const handleRemovePromoItem = (promoId) => {
+    setPromoCart(prev => prev.filter(item => item.id !== promoId));
   };
 
     const sendToWhatsApp = (formData) => {
@@ -514,6 +560,24 @@ export default function App() {
                 />
               );
             }
+
+            if (product.category === 'Promociones' && product.id === '18') {
+              const promoQuantity = promoCart.reduce((sum, item) => sum + item.quantity, 0);
+              return (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  quantity={promoQuantity}
+                  onAdd={() => handleOpenPromoModal(product)}
+                  onRemove={() => {
+                    if (promoCart.length > 0) {
+                      const lastPromo = promoCart[promoCart.length - 1];
+                      handleRemovePromoItem(lastPromo.id);
+                    }
+                  }}
+                />
+              );
+            }
             
             return (
               <ProductCard
@@ -542,6 +606,15 @@ export default function App() {
         toppings={potatoToppings}
       />
 
+      <PromoModal
+        isOpen={isPromoModalOpen}
+        onClose={() => setIsPromoModalOpen(false)}
+        product={selectedPromoProduct}
+        onAdd={handleAddPromoToCart}
+        pizzas={promoPizzaOptions}
+        drinks={promoDrinkOptions}
+      />
+
       <CartModal
         isOpen={isCartOpen}
         onClose={() => setIsCartOpen(false)}
@@ -550,6 +623,8 @@ export default function App() {
           // Si es una papa, remover del potatoCart
           if (id.startsWith('potato-')) {
             setPotatoCart(prev => prev.filter(item => item.id !== id));
+          } else if (id.startsWith('promo-')) {
+            setPromoCart(prev => prev.filter(item => item.id !== id));
           } else {
             removeItemCompletely(id);
           }

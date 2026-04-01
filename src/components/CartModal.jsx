@@ -164,6 +164,43 @@ export function CartModal({ isOpen, onClose, items, onRemoveItem, onSendWhatsApp
                           </div>
                         </motion.div>
                       );
+                    } else if (item.type === 'promo') {
+                      const { product, pizza, drink, quantity, totalPrice, id } = item;
+                      return (
+                        <motion.div
+                          key={id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 20 }}
+                          className="flex items-center gap-4 bg-slate-950/50 rounded-xl p-4 hover:bg-slate-950/70 transition-colors border border-amber-500/20"
+                        >
+                          <img src={product.image} alt={product.name} className="size-20 object-cover rounded-lg" />
+
+                          <div className="flex-1">
+                            <h3 className="font-bold text-amber-400">{product.name}</h3>
+                            <p className="text-xs text-amber-300 mt-1">
+                              Pizza: {pizza?.name || 'N/A'}, Bebida: {drink?.name || 'N/A'}
+                            </p>
+                            <p className="text-sm text-slate-300">
+                              ${product.price.toLocaleString('es-CL')} × {quantity}
+                            </p>
+                          </div>
+
+                          <div className="text-right">
+                            <p className="font-bold text-lg text-amber-400">
+                              ${totalPrice.toLocaleString('es-CL')}
+                            </p>
+
+                            <button
+                              onClick={() => onRemoveItem(id)}
+                              className="text-red-400 hover:text-red-300 text-sm flex items-center gap-1 mt-1"
+                            >
+                              <Trash2 className="size-4" />
+                              Eliminar
+                            </button>
+                          </div>
+                        </motion.div>
+                      );
                     }
                   })}
                 </div>
