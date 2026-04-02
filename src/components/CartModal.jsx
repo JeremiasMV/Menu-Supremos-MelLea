@@ -178,7 +178,8 @@ export function CartModal({ isOpen, onClose, items, onRemoveItem, onSendWhatsApp
 
                           <div className="flex-1">
                             <h3 className="font-bold text-amber-400">{product.name}</h3>
-                            <p className="text-xs text-amber-300 mt-1">
+                            <p className="text-sm text-slate-300 mb-1">{product.description}</p>
+                            <p className="text-sm text-amber-300">
                               Pizza: {pizza?.name || 'N/A'}, Bebida: {drink?.name || 'N/A'}
                             </p>
                             <p className="text-sm text-slate-300">

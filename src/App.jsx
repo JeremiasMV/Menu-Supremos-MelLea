@@ -488,7 +488,7 @@ export default function App() {
     message += `• Método de Pago: ${formData.paymentMethod}\n\n`;
     
     message += `*PRODUCTOS:*\n`;
-    cartItems.forEach(({ product, quantity, type, toppings }) => {
+    cartItems.forEach(({ product, quantity, type, toppings, pizza, drink, totalPrice }) => {
       if (type === 'regular') {
         message += `• ${product.name} x${quantity} - $${(product.price * quantity).toLocaleString('es-CL')}\n`;
       } else if (type === 'potato') {
@@ -496,6 +496,8 @@ export default function App() {
           ? `\n  Toppings: ${toppings.map(t => `${t.name} ($${t.price.toLocaleString('es-CL')})`).join(', ')}`
           : '';
         message += `• ${product.name} x${quantity}${toppingText} - $${(quantity * (product.price + toppings.reduce((sum, t) => sum + t.price, 0))).toLocaleString('es-CL')}\n`;
+      } else if (type === 'promo') {
+        message += `• ${product.name} (${pizza?.name || 'N/A'}, ${drink?.name || 'N/A'}) x${quantity} - $${totalPrice.toLocaleString('es-CL')}\n`;
       }
     });
 
