@@ -135,7 +135,7 @@ const products = [
     name: 'Papas Fritas Chicas',
     description: 'Porción de papas fritas chicas crujientes y doradas',
     price: 1500,
-    image:  PapasFritasChicas,
+    image:  PapasFritas,
     category: 'Papas Fritas'
   },
   {
@@ -151,7 +151,7 @@ const products = [
     name: 'Papas Fritas Grandes',
     description: 'Porción de papas fritas grandes crujientes y doradas',
     price: 3500,
-    image: PapasFritasGrandes,
+    image: PapasFritas,
     category: 'Papas Fritas'
   },
   {
